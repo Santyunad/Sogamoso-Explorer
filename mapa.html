@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sogamoso Explorer - Mapa Interactivo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style> #map { height: 500px; width: 100%; border-radius: 1rem; } </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+    <header class="bg-slate-900 text-white sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 flex justify-between items-center h-20">
+            <a href="index.html" class="flex items-center gap-2 text-xl font-extrabold text-emerald-400">
+                <i class="fa-solid fa-compass"></i> Sogamoso Explorer
+            </a>
+            <a href="index.html" class="text-xs text-slate-300 hover:text-white">Volver al Inicio</a>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
+        <h1 class="text-3xl font-black mb-2">Sistema de Navegación por Mapa</h1>
+        <p class="text-slate-600 text-sm mb-6">Explora geográficamente todos los puntos turísticos y culturales de Sogamoso.</p>
+        
+        <div class="bg-white p-4 rounded-2xl border shadow-xl">
+            <div id="map"></div>
+        </div>
+    </main>
+
+    <script>
+        const map = L.map('map').setView([5.7153, -72.9333], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        // Marcadores reales de Sogamoso
+        const points = [
+            { title: "Templo del Sol - Museo Suamox", lat: 5.722, lng: -72.928 },
+            { title: "Plaza de la Villa", lat: 5.7153, lng: -72.9333 },
+            { title: "Sendero La Pillama", lat: 5.725, lng: -72.920 },
+            { title: "Santuario de Morcá", lat: 5.690, lng: -72.900 }
+        ];
+
+        points.forEach(p => {
+            L.marker([p.lat, p.lng]).addTo(map).bindPopup(`<b>${p.title}</b>`);
+        });
+
+        // Detectar si viene desde un botón específico
+        const urlParams = new URLSearchParams(window.location.search);
+        const lat = urlParams.get('lat');
+        const lng = urlParams.get('lng');
+        if (lat && lng) {
+            map.setView([parseFloat(lat), parseFloat(lng)], 15);
+        }
+    </script>
+</body>
+</html>
