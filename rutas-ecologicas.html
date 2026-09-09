@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sogamoso Explorer - Experiencias</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+    <header class="bg-slate-900 text-white sticky top-0 z-50 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 flex justify-between items-center h-20">
+            <a href="index.html" class="flex items-center gap-2 text-xl font-extrabold text-emerald-400">
+                <i class="fa-solid fa-compass"></i> Sogamoso Explorer
+            </a>
+            <nav class="hidden lg:flex space-x-4 text-xs font-semibold uppercase tracking-wider items-center">
+                <a href="index.html" class="text-slate-300 hover:text-white">Inicio</a>
+                <a href="mapa.html" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg">Mapa Interactivo</a>
+                <a href="creditos.html" class="text-slate-400 hover:text-white">Créditos APA</a>
+            </nav>
+            <button onclick="toggleLang()" id="btn-lang" class="border border-slate-700 bg-slate-800 px-3 py-1 rounded-full text-xs font-bold hover:bg-emerald-500 hover:text-slate-900 transition">ES / EN</button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-10 flex-grow w-full">
+        <div class="mb-8">
+            <a href="index.html" class="text-xs text-emerald-600 font-bold uppercase tracking-wider">&larr; Volver al Inicio</a>
+            <h1 id="page-title" class="text-3xl font-black mt-2">1.1 Rutas Ecológicas y de Naturaleza</h1>
+            <p id="page-subtitle" class="text-slate-600 text-sm mt-1">Tres experiencias reales de senderismo y biodiversidad en Sogamoso.</p>
+        </div>
+
+        <!-- Requisito: Al menos 3 experiencias reales con foto, texto y botón a mapa -->
+        <div id="grid-cards" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 text-center py-6 text-xs border-t border-slate-800">
+        <p>Sogamoso Explorer © 2026 | Universidad Nacional Abierta y a Distancia (UNAD)</p>
+    </footer>
+
+    <script>
+        // Datos específicos para esta página (3 experiencias reales)
+        const pageData = {
+            title_es: "1.1 Rutas Ecológicas y de Naturaleza",
+            title_en: "1.1 Ecological and Nature Routes",
+            subtitle_es: "Tres experiencias reales de senderismo y biodiversidad en Sogamoso.",
+            subtitle_en: "Three real hiking and biodiversity experiences in Sogamoso.",
+            items: [
+                {
+                    title_es: "Sendero Ecológico La Pillama",
+                    title_en: "La Pillama Ecological Trail",
+                    desc_es: "Ruta de senderismo de alta montaña que conecta con bosques de roble y nacimientos de agua cristalina a las afueras de Sogamoso.",
+                    desc_en: "High mountain hiking route connecting oak forests and crystal-clear water sources on the outskirts of Sogamoso.",
+                    img: "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=600&q=80",
+                    lat: 5.725, lng: -72.920
+                },
+                {
+                    title_es: "Caminata al Cerro del Chinchanal",
+                    title_en: "Chinchanal Hill Hike",
+                    desc_es: "Mirador natural panorámico que ofrece la mejor vista de todo el Valle de Sugamuxi y la cordillera Oriental.",
+                    desc_en: "Natural panoramic viewpoint offering the best view of the entire Sugamuxi Valley and Eastern Range.",
+                    img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80",
+                    lat: 5.710, lng: -72.940
+                },
+                {
+                    title_es: "Ruta de Frailejones en Pisba",
+                    title_en: "Pisba Frailejones Route",
+                    desc_es: "Recorrido de ecosistema de alta montaña cargado de frailejones, lagunas glaciares e historia republicana.",
+                    desc_en: "High mountain ecosystem tour filled with frailejones, glacial lagoons, and history.",
+                    img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80",
+                    lat: 5.740, lng: -72.900
+                }
+            ]
+        };
+
+        let lang = 'es';
+        function render() {
+            document.getElementById('page-title').innerText = lang === 'es' ? pageData.title_es : pageData.title_en;
+            document.getElementById('page-subtitle').innerText = lang === 'es' ? pageData.subtitle_es : pageData.subtitle_en;
+            
+            const container = document.getElementById('grid-cards');
+            container.innerHTML = pageData.items.map(item => `
+                <div class="bg-white rounded-2xl overflow-hidden shadow-md border flex flex-col justify-between">
+                    <div>
+                        <img src="${item.img}" class="w-full h-48 object-cover">
+                        <div class="p-5">
+                            <h3 class="font-bold text-lg text-slate-900 mb-2">${lang === 'es' ? item.title_es : item.title_en}</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">${lang === 'es' ? item.desc_es : item.desc_en}</p>
+                        </div>
+                    </div>
+                    <div class="p-5 pt-0">
+                        <a href="mapa.html?lat=${item.lat}&lng=${item.lng}" class="block w-full text-center py-2 bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white rounded-xl text-xs font-bold transition">
+                            <i class="fa-solid fa-map-location-dot"></i> ${lang === 'es' ? 'Ver en Mapa Interactivo' : 'Locate on Interactive Map'}
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleLang() {
+            lang = lang === 'es' ? 'en' : 'es';
+            document.getElementById('btn-lang').innerText = lang === 'es' ? 'ES / EN' : 'EN / ES';
+            render();
+        }
+
+        render();
+    </script>
+</body>
+</html>
